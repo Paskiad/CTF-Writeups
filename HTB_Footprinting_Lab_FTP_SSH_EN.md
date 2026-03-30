@@ -31,7 +31,8 @@ Nmap Scan → FTP Login (port 2121) → id_rsa Extraction → SSH Login → Flag
 nmap -sV -sS 10.129.33.148
 ```
 
-![[scan_nmap.png]]
+<img width="1903" height="473" alt="scan nmap" src="https://github.com/user-attachments/assets/fdb94979-ca18-410c-834e-5bb19a12936c" />
+
 
 **Results:**
 
@@ -62,7 +63,8 @@ Using the provided credentials, we attempt to log into the custom FTP instance o
 ftp 10.129.33.148 2121
 ```
 
-![[login_ftp.png]]
+<img width="1907" height="191" alt="login ftp" src="https://github.com/user-attachments/assets/a497ca4b-bad3-468c-9641-90552af2664b" />
+
 
 ```
 Name: ceil
@@ -85,7 +87,8 @@ ftp> cd .ssh
 ftp> ls -la
 ```
 
-![[exploring_ftp.png]]
+<img width="1922" height="742" alt="exploring ftp" src="https://github.com/user-attachments/assets/9f46181b-6ff4-4ea2-90c4-2519699b7320" />
+
 
 Contents of the `.ssh` directory:
 
@@ -119,7 +122,8 @@ chmod 600 id_rsa
 ssh -i id_rsa ceil@10.129.33.148
 ```
 
-![[login_ssh.png]]
+<img width="1918" height="703" alt="login ssh" src="https://github.com/user-attachments/assets/05f41efb-8183-4c37-8b15-9d9f9e20a79b" />
+
 
 ✅ **SSH access obtained** as user `ceil` on `NIXEASY` (Ubuntu 20.04.1 LTS).
 
@@ -139,7 +143,8 @@ ceil@NIXEASY:/home$ cd flag
 ceil@NIXEASY:/home/flag$ cat flag.txt
 ```
 
-![[get_flag.png]]
+<img width="1917" height="395" alt="get flag" src="https://github.com/user-attachments/assets/b6027305-d147-4d0e-8cdc-37c7b249b763" />
+
 
 **Flag:**
 
