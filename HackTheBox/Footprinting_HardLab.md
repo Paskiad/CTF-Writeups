@@ -86,7 +86,6 @@ Once connected, login and folder listing were performed:
 1 LIST "" "*"
 ```
 
-📸 *[INSERT: imap_folders.png]*
 
 The following folders were found:
 ```
@@ -131,7 +130,6 @@ After gaining access, the `/etc/passwd` file was checked to identify users and s
 cat /etc/passwd
 ```
 
-📸 *[INSERT: passwd_file.png]*
 
 The presence of the **mysql** user confirmed that a MySQL database was running internally — not visible from the outside network.
 
