@@ -50,6 +50,7 @@ Browsing to `http://<TARGET_IP>/retro` reveals a video-game themed blog. The aut
 ---
 
 ## 3. Passive OSINT — Credential Discovery
+![retro](https://github.com/user-attachments/assets/e9b7ced7-1870-42cd-9695-15482ef6ac97)
 
 Manually reading through the blog posts, the entry **"Ready Player One"** contains a comment left by Wade that exposes what appears to be a password in plain text:
 
