@@ -185,23 +185,6 @@ The server returns the flag:
 
 <img width="1600" height="671" alt="flag" src="https://github.com/user-attachments/assets/6b082c0e-2d07-43b6-8ffe-d5c25721d932" />
 
-```
-
----
-
-## Key Takeaways
-
-This assessment is a textbook example of the **fuzzing chain** — each layer of the attack surface is discovered by feeding the previous result into the next scan:
-
-```
-VHost fuzzing      → archive, test, faculty
-Extension fuzzing  → .php, .php7, .phps
-Recursive fuzzing  → /courses/linux-security.php7
-Parameter fuzzing  → username (user was deprecated)
-Value fuzzing      → harry
-→ FLAG
-```
-
 A few lessons worth internalising:
 
 - **Subdomain fuzzing fails on non-public domains** — reach for VHost fuzzing and target the IP directly.
