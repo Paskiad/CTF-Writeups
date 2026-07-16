@@ -181,11 +181,3 @@ MySQL internal → users table → HTB flag
 
 ---
 
-## Key Takeaways
-
-- Always run a **UDP scan** after TCP — SNMP on UDP 161 is frequently missed and often misconfigured
-- **SNMP community strings** like `public` and `backup` can expose sensitive system information including plaintext credentials
-- **IMAP mailboxes** can contain sensitive data — always list ALL folders, not just INBOX
-- **Credential reuse** is extremely common — the same credentials worked for IMAP, SSH and MySQL
-- Internal services like MySQL are not visible from outside — gaining initial access reveals the full attack surface
-- Always set **chmod 600** on SSH private keys — otherwise SSH will refuse to use them
