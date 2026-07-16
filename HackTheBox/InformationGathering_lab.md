@@ -233,27 +233,4 @@ robots.txt analysis
 ReconSpider (dev.web1337.inlanefreight.htb)
     → Email: 1337testing@inlanefreight.htb
     → New API key: ba988b835be4aa97d068941dc852ff33
-```
-
----
-
-## Key Takeaways
-
-- **Passive recon first:** WHOIS revealed registrar info without touching the target
-- **Never assume:** `inlanefreight.com` runs Apache, but the `.htb` target runs nginx — always fingerprint directly
-- **robots.txt is a map:** `Disallow` entries explicitly reveal what the owner wants to hide
-- **VHost fuzzing unlocks hidden surfaces:** `web1337.inlanefreight.htb` had no public DNS record but was fully accessible
-- **Crawlers find what humans miss:** ReconSpider extracted both the email and the new API key from page comments in a single run
-- **Chain your findings:** every step fed the next — VHost → directory enum → robots.txt → admin panel → crawler → credentials
-
----
-
-## Tools Used
-
-| Tool | Purpose |
-|---|---|
-| `whois` | Domain registration info |
-| `curl -I` | HTTP banner grabbing |
-| `gobuster vhost` | Virtual host discovery |
-| `gobuster dir` | Directory enumeration |
-| `ReconSpider` | Web crawling and data extraction |
+--
