@@ -29,7 +29,7 @@ username=tester&password=Tester1234%21&repeatPassword=Tester1234%21&invitationCo
 
 The injected `' or '1'='1` subverted the invitation-code validation query, and the account was created successfully.
 
-<img width="1918" height="883" alt="sqlbypass" src="https://github.com/user-attachments/assets/b93d9563-de63-4232-a6e8-048e241836d0" />
+<img width="1430" height="883" alt="sqlbypass" src="https://github.com/user-attachments/assets/e56a973c-5ed9-47e9-b346-9d672d349276" />
 
 
 ---
