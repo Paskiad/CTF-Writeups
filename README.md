@@ -1,4 +1,4 @@
-# 🎯 Cybersecurity Write-ups & Penetration Testing Portfolio
+# Cybersecurity Write-ups & Penetration Testing Portfolio
 
 Welcome to my personal repository. I am an undergraduate student in Diplomatic Studies and Cybersecurity at the University of Salerno, currently training as a Junior Penetration Tester. 
 
